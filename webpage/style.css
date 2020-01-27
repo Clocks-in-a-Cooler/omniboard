@@ -4,6 +4,7 @@ html, body {
     border: 0px;
     margin: 0px;
     top: 0px; left: 0px;
+    width: 100%; height: 100%;
 }
 
 body {
@@ -12,15 +13,44 @@ body {
 
 /* nothing here works! I'm terrible at CSS! */
 #login_box {
-    position: relative;
+    position: absolute;
     overflow-y: scroll;
     overflow-x: auto;
     width: 50%;
     height: 50%;
-    top: 25%; left: 25%;
+    background-color: salmon;
+    padding: 5px;
+    top: 0; left: 0; bottom: 0; right: 0;
+    margin: auto;
+}
+
+#mask {
+    position: absolute;
+    width: 100%; height: 100%;
+    background-color: aliceblue;
+    opacity: 0.7;
+}
+
+#controls {
+    position: absolute;
+    overflow-y: scroll;
+    width: 110px;
+    height: 500px;
+    top: 50px;
+    left: 0px;
+    background-color: lime;
 }
 
 canvas {
     position: absolute;
     top: 0px; left: 0px;
+}
+
+#chat {
+    position: absolute;
+    background-color: slateblue;
+    left: auto;
+    top: 0px; right: 0px;
+    width: 400px;
+    height: 100%;
 }

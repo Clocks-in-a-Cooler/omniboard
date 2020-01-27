@@ -1,24 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Omniboard</title>
+        <link rel="stylesheet" href="style.css" />
+        <meta charset="utf-8" />
     </head>
     <body>
-        <div id="login_box">
-            <form>
-                <input type="text" name="username"></input>
-            </form>
-            <h3>Privacy Policy (let's be explicit about this)</h3>
-            <p>We'll be logging these things:</p>
-            <ul>
-                <li>your IP address</li>
-                <li>the name you enter into the box above</li>
-                <li>any chat messages you send</li>
-            </ul>
-            <p>You don't like this? Cheer up: Every website you visit does this. You're welcome.</p>
-        </div>
         <canvas id="image_layer"></canvas>
         <canvas id="control_layer"></canvas>
-        <div id="controls" visibility="hidden"> <!-- div soup! weeeeeeeeeeeeeeee! -->
+        <div id="controls"> <!-- div soup! weeeeeeeeeeeeeeee! -->
             <div id="colour_controls">
                 <button class="rbutton" id="firebrick" style="background-color:firebrick;"></button>
                 <button class="rbutton" id="darkorange" style="background-color:darkorange;"></button>
@@ -38,6 +28,21 @@
         </div>
         <div id="chat">
             
+        </div>        
+        <div id="mask"></div>
+        <div id="login_box">
+            <form>
+                <input type="text" name="username" placeholder="your name..."></input>
+                <input type="submit" value="enter"></input>
+            </form>
+            <h3>Privacy Policy (let's be explicit about this)</h3>
+            <p>We'll be logging these things:</p>
+            <ul>
+                <li>your IP address</li>
+                <li>the name you enter into the box above</li>
+                <li>any chat messages you send</li>
+            </ul>
+            <p>You don't like this? Cheer up: Every website you visit does this too. You're welcome.</p>
         </div>
         <script src="socket.io.slim.js"></script>
         <!-- on production version, the script will be the minified version -->
