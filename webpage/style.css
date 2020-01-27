@@ -1,0 +1,26 @@
+html, body {
+    position: absolute;
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+    top: 0px; left: 0px;
+}
+
+body {
+    background-image: url("blank.png");
+}
+
+/* nothing here works! I'm terrible at CSS! */
+#login_box {
+    position: relative;
+    overflow-y: scroll;
+    overflow-x: auto;
+    width: 50%;
+    height: 50%;
+    top: 25%; left: 25%;
+}
+
+canvas {
+    position: absolute;
+    top: 0px; left: 0px;
+}

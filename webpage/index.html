@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <div id="login_box">
+            <form>
+                <input type="text" name="username"></input>
+            </form>
+            <h3>Privacy Policy (let's be explicit about this)</h3>
+            <p>We'll be logging these things:</p>
+            <ul>
+                <li>your IP address</li>
+                <li>the name you enter into the box above</li>
+                <li>any chat messages you send</li>
+            </ul>
+            <p>You don't like this? Cheer up: Every website you visit does this. You're welcome.</p>
+        </div>
+        <canvas id="image_layer"></canvas>
+        <canvas id="control_layer"></canvas>
+        <div id="controls" visibility="hidden"> <!-- div soup! weeeeeeeeeeeeeeee! -->
+            <div id="colour_controls">
+                <button class="rbutton" id="firebrick" style="background-color:firebrick;"></button>
+                <button class="rbutton" id="darkorange" style="background-color:darkorange;"></button>
+                <button class="rbutton" id="gold" style="background-color:gold;"></button>
+                <button class="rbutton" id="lime" style="background-color:lime;"></button>
+                <button class="rbutton" id="forestgreen" style="background-color:forestgreen;"></button>
+                <button class="rbutton" id="lightskyblue" style="background-color:lightskyblue;"></button>
+                <button class="rbutton" id="dodgerblue" style="background-color:dodgerblue;"></button>
+                <button class="rbutton" id="rebeccapurple" style="background-color:rebeccapurple;"></button>
+                <button class="rbutton" id="dimgray" style="background-color:dimgray;"></button>
+                <button class="rbutton" id="saddlebrown" style="background-color:saddlebrown";"></button>
+            </div>
+            <div id="tools">
+                <button class="rbutton" id="pencil" style="width: 100%;">pencil</button>
+                <button class="rbutton" id="eraser" style="width: 100%;">eraser</button>
+            </div>
+        </div>
+        <div id="chat">
+            
+        </div>
+        <script src="socket.io.slim.js"></script>
+        <!-- on production version, the script will be the minified version -->
+        <script src="whiteboard_client.js"></script>
+    </body>
+</html>

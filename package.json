@@ -1,0 +1,18 @@
+{
+    "name": "omniboard",
+    "version": "0.0.1",
+    "description": "a collaborative whiteboard",
+    "main": "main.js",
+    "dependencies": {
+        "express": "latest",
+        "socket.io": "latest",
+        "lowdb": "latest",
+        "canvas": "latest"
+    },
+    "scripts": {
+        "test": "node main.js 7357",
+        "start": "node main.js"
+    },
+    "author": "clocks-in-a-cooler",
+    "license": "MIT"
+}
