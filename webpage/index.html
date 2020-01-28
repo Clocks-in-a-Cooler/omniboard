@@ -25,9 +25,20 @@
                 <button class="rbutton" id="pencil" style="width: 100%;">pencil</button>
                 <button class="rbutton" id="eraser" style="width: 100%;">eraser</button>
             </div>
+            
+            <div id="instructions">
+                <h3>Controls</h3>
+                <p>Scroll to adjust pencil or eraser size</p>
+                <p>Space to show/hide this panel</p>
+                <p>Enter to download the image</p>
+            </div>
         </div>
         <div id="chat">
-            
+            <div id="messages"></div>
+            <form id="send_message">
+                <input type="text" placeholder="send a message..."></input>
+                <input type="submit" value="send"></input>
+            </form>
         </div>        
         <div id="mask"></div>
         <div id="login_box">
@@ -43,6 +54,8 @@
                 <li>any chat messages you send</li>
             </ul>
             <p>You don't like this? Cheer up: Every website you visit does this too. You're welcome.</p>
+            <br />
+            <p style="font-size: 6pt;">made by Clocks-in-a-cooler, 2020. Welcome to the future!</p>
         </div>
         <script src="socket.io.slim.js"></script>
         <!-- on production version, the script will be the minified version -->
