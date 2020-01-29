@@ -16,6 +16,7 @@ function create_sprite(path) {
 }
 var orange_pencil = create_sprite("pencil_orange.png");
 var blue_pencil = create_sprite("pencil_blue.png");
+var eraser = create_sprite("eraser.png");
 
 //set up the rest of the page.
 var image_layer = document.getElementById("image_layer");
@@ -53,7 +54,7 @@ var mouse = {
         console.log("mouse click at (" + mouse.pos.x + ", " + mouse.pos.y + ")");
     },
     scroll: function(evt) {
-        var direction = this.find_scroll_direction(evt);
+        var direction = mouse.find_scroll_direction(evt);
         if (direction == "down") {
             draw_size -= 0.1;
             draw_size = Math.max(draw_size, 0.2);
@@ -96,14 +97,39 @@ function addEventListeners() {
     addEventListener("click", mouse.click);
 
     addEventListener("wheel", mouse.scroll);
+    
+    addEventListener("keyup", function(evt) {
+        switch (evt.key) {
+            case "S":
+            case "s":
+                if (evt.ctrlKey) {
+                    save_image();
+                }
+                break;
+            case " ":
+                toggle_controls();
+                break;
+        }
+    });
 }
 
 var others = [];
 
 function draw_others() {
+    control_cxt.fillStyle = "dodgerblue";
+    control_cxt.font = "12pt sans-serif";
+    control_cxt.textBaseline = "top";
+    control_cxt.textAlign = "center";
     others.forEach(u => {
-        console.log("pos: " + u.x + ", " + u.y);
-        control_cxt.drawImage(blue_pencil, u.x, u.y - 30);
+        switch (u.tool) {
+            case "pencil":
+                control_cxt.drawImage(blue_pencil, u.x, u.y - 30);
+                break;
+            case "eraser":
+                control_cxt.drawImage(eraser, u.x, u.y - 30);
+                break;
+        }
+        control_cxt.fillText(u.name, u.x, u.y + 3);
     });
 }
 
@@ -122,7 +148,7 @@ var tools = {
                 if (this.last_pos != null) {
                     //draw!
                     image_cxt.fillStyle = image_cxt.strokeStyle = current_colour;
-                    image_cxt.lineWidth = this.size * draw_size;
+                    image_cxt.lineWidth = draw_size;
                     image_cxt.beginPath();
                     image_cxt.moveTo(this.last_pos.x, this.last_pos.y);
                     image_cxt.lineTo(mouse.pos.x, mouse.pos.y);
@@ -132,10 +158,10 @@ var tools = {
                     image_cxt.beginPath();
                     image_cxt.moveTo(this.last_pos.x, this.last_pos.y);
                     image_cxt.arc(this.last_pos.x, this.last_pos.y,
-                        this.size * draw_size * 0.5, 0, Math.PI * 2);
+                        draw_size * 0.5, 0, Math.PI * 2);
                     image_cxt.moveTo(mouse.pos.x, mouse.pos.y);
                     image_cxt.arc(mouse.pos.x, mouse.pos.y,
-                        this.size * draw_size * 0.5, 0, Math.PI * 2);
+                        draw_size * 0.5, 0, Math.PI * 2);
                     image_cxt.closePath();
                     image_cxt.fill();
                     
@@ -179,8 +205,8 @@ var tools = {
     
     "eraser": {
         update: function() {
+            var length = this.get_size(draw_size);
             if (mouse.clicking) {
-                var length = this.get_size(draw_size);
                 image_cxt.clearRect(mouse.pos.x - length,
                     mouse.pos.y - length, length * 2, length * 2);
                 socket.emit("drawing", {
@@ -189,7 +215,7 @@ var tools = {
                     x: mouse.pos.x, y: mouse.pos.y,
                 });
             }
-            
+                        
             //draw on screen
             control_cxt.strokeStyle = "black";
             control_cxt.lineWidth = 2;
@@ -211,25 +237,14 @@ var tools = {
 };
 
 var current_colour = "dodgerblue";
-var current_tool = tools["pencil"];
+var current_tool = "pencil";
 
 create_rbutton_group(document.getElementById("colour_controls"), (data) => {
-    
+    current_colour = data;
 });
 
 create_rbutton_group(document.getElementById("tools"), (data) => {
-
-});
-
-addEventListener("keyup", function(evt) {
-    switch (evt.key) {
-        case "Enter":
-            save_image();
-            break;
-        case " ":
-            toggle_controls();
-            break;
-    }
+    current_tool = data;
 });
 
 function save_image() {
@@ -275,7 +290,7 @@ socket.on("draw", (data) => {
 
 function cycle() {
     control_cxt.clearRect(0, 0, control_layer.width, control_layer.height);
-    current_tool.update();
-    socket.emit("position update", { pos: mouse.pos, });
+    tools[current_tool].update();
+    socket.emit("position update", { pos: mouse.pos, tool: current_tool, });
     requestAnimationFrame(cycle);
 }

@@ -42,7 +42,8 @@ io.on("connection", function(socket) {
     
     socket.on("position update", (data) => {
         //when an update comes in
-        User.x = data.pos.x; User.y = data.pos.y;
+        user.x = data.pos.x; user.y = data.pos.y;
+        user.tool = data.tool;
         //ping an update back
         socket.emit("server update", get_users(user));
     });
@@ -55,6 +56,7 @@ io.on("connection", function(socket) {
     
     socket.on("disconnect", (data) => {
         if (user != null) user.online = false;
+        log("user at " + address + " has disconnected.", "notification");
     });
 });
 
