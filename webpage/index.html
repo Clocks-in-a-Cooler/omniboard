@@ -8,7 +8,7 @@
     <body>
         <canvas id="image_layer"></canvas>
         <canvas id="control_layer"></canvas>
-        <div id="controls"> <!-- div soup! weeeeeeeeeeeeeeee! -->
+        <div id="controls" style="visibility: visible;"> <!-- div soup! weeeeeeeeeeeeeeee! -->
             <div id="colour_controls">
                 <button class="rbutton" id="firebrick" style="background-color:firebrick;"></button>
                 <button class="rbutton" id="darkorange" style="background-color:darkorange;"></button>
@@ -42,7 +42,7 @@
         </div>        
         <div id="mask"></div>
         <div id="login_box">
-            <form>
+            <form id="login_form">
                 <input type="text" name="username" placeholder="your name..."></input>
                 <input type="submit" value="enter"></input>
             </form>
@@ -57,7 +57,7 @@
             <br />
             <p style="font-size: 6pt;">made by Clocks-in-a-cooler, 2020. Welcome to the future!</p>
         </div>
-        <script src="socket.io.slim.js"></script>
+        <script src="socket.io.min.js"></script>
         <!-- on production version, the script will be the minified version -->
         <script src="whiteboard_client.js"></script>
     </body>

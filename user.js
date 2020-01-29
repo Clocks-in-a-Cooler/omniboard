@@ -1,4 +1,4 @@
-function User() {
+function User(name) {
     this.x = 0, this.y = 0;
     this.tool = "pencil";
     this.name = name;
