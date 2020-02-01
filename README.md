@@ -20,6 +20,8 @@
 
     Open a browser and go to `localhost:3000`.
     
+For a production version of Omniboard, use the `release` branch.
+
 ## License
 
-I'll add one soon.
+MIT License. Use this however you want.
