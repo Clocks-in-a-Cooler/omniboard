@@ -98,7 +98,12 @@ function addEventListeners() {
 
     addEventListener("wheel", mouse.scroll);
     
-    addEventListener("keyup", function(evt) {
+    document.getElementById("download").addEventListener("click", () => {
+        save_image();
+    });
+    
+    /*
+    control_layer.addEventListener("keyup", function(evt) {
         switch (evt.key) {
             case "S":
             case "s":
@@ -108,7 +113,7 @@ function addEventListeners() {
                 toggle_controls();
                 break;
         }
-    });
+    });*/
 }
 
 var others = [];

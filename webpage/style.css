@@ -60,6 +60,20 @@ body {
     padding: 5px;
 }
 
+#download {
+    color: forestgreen;
+    border: 1px solid forestgreen;
+    border-radius: 5px;
+    background-color: white;
+    transition: background-color .5s, color .5s;
+}
+
+#download:hover {
+    color: white;
+    background-color: forestgreen;
+    transition: background-color .5s, color .5s;
+}
+
 canvas {
     position: absolute;
     top: 0px; left: 0px;
