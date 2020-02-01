@@ -134,10 +134,10 @@ function draw_others() {
 var tools = {
     /*
         data to send:
-        [ ] size of pencil/eraser
-        [ ] position of the mouse (start and end for pencil, x and y for eraser)
-        [ ] current tool (so that the data can be interpreted properly
-        [ ] colour
+        [x] size of pencil/eraser
+        [x] position of the mouse (start and end for pencil, x and y for eraser)
+        [x] current tool (so that the data can be interpreted properly
+        [x] colour
     */
     "pencil": {
         last_pos: null,
@@ -257,6 +257,24 @@ function toggle_controls() {
     controls.style.visibility = visibility == "hidden" ? "visible" : "hidden";
 }
 
+var send_message = document.getElementById("send_message");
+
+send_message.addEventListener("submit", function(evt) {
+    evt.preventDefault();
+    socket.emit("send message", send_message.message.value);
+    add_message(send_message.message.value, "my_message");
+    send_message.message.value = "";
+});
+
+var messages_panel = document.getElementById("messages");
+function add_message(message, type) {
+    var m = document.createElement("div");
+    m.className = type;
+    m.innerHTML = message;
+    messages_panel.appendChild(m);
+    messages_panel.scrollTo(0, messages_panel.scrollHeight);
+}
+
 //events from the server
 socket.on("logged in", (data) => {
     document.body.removeChild(document.getElementById("mask"));
@@ -265,20 +283,16 @@ socket.on("logged in", (data) => {
     var img = new Image();
     img.src = data.image;
     img.onload = function() { image_cxt.drawImage(img, 0, 0); };
-    //image_cxt.putImageData(data.image, 0, 0);
     addEventListeners();
     requestAnimationFrame(cycle);
 });
 
 socket.on("server update", (data) => {
     others = data;
-    /*data.forEach(u => {
-        control_cxt.drawImage(blue_pencil, u.x, u.y - 30);
-    });*/
 });
 
 socket.on("draw", (data) => {
-    //the same as tcanvas.js on the server side!
+    //the same as canvas.js on the server side!
     switch (data.tool) {
         case "pencil":
             tools.pencil.draw(data);
@@ -287,6 +301,14 @@ socket.on("draw", (data) => {
             tools.eraser.draw(data);
             break;
     }
+});
+
+socket.on("incoming message", function(data) {
+    add_message(data, "message");
+});
+
+socket.on("notification", function(data) {
+    add_message(data, "notification");
 });
 
 function cycle() {

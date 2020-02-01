@@ -57,6 +57,7 @@ body {
 
 #instructions {
     font-size: 8pt;
+    padding: 5px;
 }
 
 canvas {
@@ -77,6 +78,7 @@ canvas {
 #messages {
     position: absolute;
     top:0px; bottom: 2.5em;
+    overflow-y: scroll;
     width: 100%;
     border-bottom: 1px solid black;
 }
@@ -92,7 +94,32 @@ canvas {
 .message {
     width: 70%;
     margin: 5px;
-    border-style: solid;
-    border-width: 1px;
+    padding: 5px;
+    float: left;
+    color: royalblue;
+    background-color: powderblue;
+    border: 1px solid royalblue;
+    border-radius: 3px;
 }
 
+.my_message {
+    width: 70%;
+    margin: 5px;
+    padding: 5px;
+    float: right;
+    color: darkorange;
+    background-color: khaki;
+    border: 1px solid darkorange;
+    border-radius: 3px;
+}
+
+.notification {
+    width: 70%;
+    margin: 5px;
+    padding: 5px;
+    float: right;
+    color: darkslategray;
+    background-color: white;
+    border: 1px solid darkslategray;
+    border-radius: 3px;
+}
