@@ -102,9 +102,7 @@ function addEventListeners() {
         switch (evt.key) {
             case "S":
             case "s":
-                if (evt.ctrlKey) {
-                    save_image();
-                }
+                save_image();
                 break;
             case " ":
                 toggle_controls();

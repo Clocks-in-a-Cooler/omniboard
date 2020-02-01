@@ -40,7 +40,9 @@ function save_image() { //again, courtesy of Julian Lannigan on Stack Overflow
     var image_buffer = new Buffer(data, "base64");
     log("saving image to file...");
     fs.writeFile("board.png", image_buffer, function(error) {
-        log("error saving image.", "ERROR");
+        if (error) {
+            log(error.message, "ERROR");
+        }
     });
 }
 
