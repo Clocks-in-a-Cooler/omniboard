@@ -264,6 +264,9 @@ socket.on("logged in", (data) => {
     document.body.removeChild(document.getElementById("mask"));
     document.body.removeChild(document.getElementById("login_box"));
     
+    var img = new Image();
+    img.src = data.image;
+    img.onload = function() { image_cxt.drawImage(img, 0, 0); };
     //image_cxt.putImageData(data.image, 0, 0);
     addEventListeners();
     requestAnimationFrame(cycle);

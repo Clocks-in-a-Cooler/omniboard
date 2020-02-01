@@ -36,7 +36,7 @@ io.on("connection", function(socket) {
         user = new User(data.name);
         users.push(user);
         socket.emit("logged in", {
-            //image: canvas.get_image(),
+            image: canvas.get_image(),
         });
     });
     
@@ -82,5 +82,6 @@ function update() {
 }
 
 setImmediate(update);
-//setInterval(canvas.save_image, 60000);
-
+setInterval(function() {
+    canvas.save_image();
+}, 60000);

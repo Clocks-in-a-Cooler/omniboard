@@ -36,22 +36,8 @@ function pencil(data) {
 }
 
 function save_image() { //again, courtesy of Julian Lannigan on Stack Overflow
-    /*
-    var data = canvas.toDataURL();
-    
-    var matches = data.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
-    response = {};
-
-    if (matches.length !== 3) {
-        return new Error('Invalid input string');
-    }
-
-    response.type = matches[1];
-    response.data = new Buffer(matches[2], 'base64');
-    
-    var image_buffer = decodeBase64Image(response);
-    */
-    var image_buffer = canvas.toBuffer();
+    var data = canvas.toDataURL().slice(22);
+    var image_buffer = new Buffer(data, "base64");
     log("saving image to file...");
     fs.writeFile("board.png", image_buffer, function(error) {
         log("error saving image.", "ERROR");
@@ -60,7 +46,7 @@ function save_image() { //again, courtesy of Julian Lannigan on Stack Overflow
 
 module.exports = {
     get_image: function() {
-        return cxt.createImageData();
+        return canvas.toDataURL();
     },
     
     draw: function(data) {
