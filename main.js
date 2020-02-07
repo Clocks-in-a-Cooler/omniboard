@@ -35,7 +35,9 @@ io.on("connection", function(socket) {
         log(data.name + " (socket id: "+ id + ") connecting from " + address);
         user = new User(data.name);
         users.push(user);
-        socket.broadcast.emit("notification", user.name + " has joined! Welcome!");
+        if (user != null) {
+            socket.broadcast.emit("notification", user.name + " has joined! Welcome!");
+        }
         socket.emit("logged in", {
             image: canvas.get_image(),
         });
@@ -62,8 +64,10 @@ io.on("connection", function(socket) {
     });
     
     socket.on("disconnect", (data) => {
-        if (user != null) user.online = false;
-        socket.broadcast.emit("notification", user.name + " has disconnected");
+        if (user != null) {
+            user.online = false;
+            socket.broadcast.emit("notification", user.name + " has disconnected");
+        }
         log("user at " + address + " has disconnected.", "notification");
     });
 });

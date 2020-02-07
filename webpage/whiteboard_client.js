@@ -244,6 +244,9 @@ var current_tool = "pencil";
 
 create_rbutton_group(document.getElementById("colour_controls"), (data) => {
     current_colour = data;
+    if (current_tool == "eraser") {
+        current_tool = "pencil";
+    }
 });
 
 create_rbutton_group(document.getElementById("tools"), (data) => {

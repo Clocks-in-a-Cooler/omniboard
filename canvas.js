@@ -5,6 +5,16 @@ var log = require("./logging.js");
 var canvas = node_canvas.createCanvas(1920, 1080); //hopefully nobody's using a 4K screen
 var cxt = canvas.getContext("2d");
 
+//check if a board.png exists, and load it
+var img = new node_canvas.Image();
+img.onload = function() {
+    cxt.drawImage(img, 0, 0);
+};
+img.onerror = function(error) {
+    log("error loading file: " + error.message, "ERROR");
+};
+img.src = "board.png";
+
 function eraser(data) {
     var eraser_size = get_eraser_size(data.size);
     cxt.clearRect(data.x - eraser_size, data.y - eraser_size,
