@@ -31,6 +31,16 @@ io.on("connection", function(socket) {
     log("a new connection is coming...");
     var address = socket.handshake.address, id = socket.id;
     var user;
+
+    function user_exists() {
+        if (user == null) {
+            socket.emit("request info");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     socket.on("login", (data) => {
         log(data.name + " (socket id: "+ id + ") connecting from " + address);
         user = new User(data.name);
@@ -42,27 +52,38 @@ io.on("connection", function(socket) {
             image: canvas.get_image(),
         });
     });
-    
-    socket.on("position update", (data) => {
-        //when an update comes in
-        user.x = data.pos.x; user.y = data.pos.y;
-        user.tool = data.tool;
-        //ping an update back
-        socket.emit("server update", get_users(user));
+
+    socket.on("reply info", (data) => {
+        user = new User(data.name);
+        socket.emit("logged in", {
+            image: canvas.get_image(),
+        });
     });
-    
+
+    socket.on("position update", (data) => {
+        if (user_exists()) {
+            //when an update comes in
+            user.x = data.pos.x; user.y = data.pos.y;
+            user.tool = data.tool;
+            //ping an update back
+            socket.emit("server update", get_users(user));
+        }
+    });
+
     socket.on("drawing", (data) => {
         //interpret and broadcast the data
         canvas.draw(data);
         socket.broadcast.emit("draw", data);
     });
-    
+
     socket.on("send message", (data) => {
-        var message = user.name + ": " + data;
-        log(message, "chat");
-        socket.broadcast.emit("incoming message", user.name + ": " + data);
+        if (user_exists()) {
+            var message = user.name + ": " + data;
+            log(message, "chat");
+            socket.broadcast.emit("incoming message", user.name + ": " + data);
+        }
     });
-    
+
     socket.on("disconnect", (data) => {
         if (user != null) {
             user.online = false;
@@ -81,7 +102,7 @@ function get_users(user) {
             tool: u.tool, name: u.name,
         };
     });
-    
+
     return users_data;
 };
 
@@ -89,7 +110,7 @@ function update() {
     users = users.filter(u => {
         return u.online;
     });
-    
+
     setImmediate(update);
 }
 

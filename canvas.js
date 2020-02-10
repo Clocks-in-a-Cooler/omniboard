@@ -29,13 +29,13 @@ function get_eraser_size(size) {
 function pencil(data) {
     cxt.strokeStyle = cxt.fillStyle = data.colour;
     cxt.lineWidth = data.size;
-    
+
     cxt.beginPath();
     cxt.moveTo(data.start.x, data.start.y);
     cxt.lineTo(data.end.x, data.end.y);
     cxt.closePath();
     cxt.stroke();
-    
+
     cxt.beginPath();
     cxt.moveTo(data.start.x, data.start.y);
     cxt.arc(data.start.x, data.start.y, data.size / 2, 0, Math.PI * 2);
@@ -60,7 +60,7 @@ module.exports = {
     get_image: function() {
         return canvas.toDataURL();
     },
-    
+
     draw: function(data) {
         switch (data.tool) {
             case "pencil":
@@ -73,6 +73,6 @@ module.exports = {
                 break;
         }
     },
-    
+
     save_image: save_image,
 };
