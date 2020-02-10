@@ -1,6 +1,7 @@
 var node_canvas = require("canvas");
 var fs = require("fs");
 var log = require("./logging.js");
+var tools = require("./webpage/tools.js");
 
 var canvas = node_canvas.createCanvas(1920, 1080); //hopefully nobody's using a 4K screen
 var cxt = canvas.getContext("2d");

@@ -331,6 +331,14 @@ socket.on("notification", function(data) {
     add_message(data, "notification");
 });
 
+socket.on("disconnect", function() {
+    add_message("you've been disconnected. you can still draw and save the board, though.", "notification");
+});
+
+socket.on("reconnect", function() {
+    add_message("connection restored.", "notification");
+});
+
 function cycle() {
     control_cxt.clearRect(0, 0, control_layer.width, control_layer.height);
     tools[current_tool].update();

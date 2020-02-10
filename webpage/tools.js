@@ -20,7 +20,7 @@ var tools = {
     },
 
     "eraser": {
-        draw: function(data, cxt) => {
+        draw: function(data, cxt) {
             var size = this.get_size(data.size);
             cxt.clearRect(data.x - size, data.y - size, data.x + size, data.y - size);
         },
@@ -32,7 +32,14 @@ var tools = {
     
     "line": {
         draw: function(data, cxt) {
+            cxt.strokeStyle = data.colour;
+            cxt.lineWidth = data.size;
             
+            cxt.beginPath();
+            cxt.moveTo(data.start.x, data.start.y);
+            cxt.lineTo(data.end.x, data.end.y);
+            cxt.closePath();
+            cxt.stroke();
         },
     },
 
@@ -41,7 +48,11 @@ var tools = {
     },
 };
 
-if (window == null) {
-    //this allows the server and the client to share the same file
+try {
+    if (window) {
+        console.log("tools.js is running in browser");
+    }
+} catch (e) {
+    //if you're here, then we're in Node.js
     module.exports = tools;
 }
