@@ -32,12 +32,10 @@ io.on("connection", function(socket) {
     var address = socket.handshake.address, id = socket.id;
     var user;
 
-    function user_exists() {
+    function user_exists(name) {
         if (user == null) {
-            socket.emit("request info");
-            return false;
-        } else {
-            return true;
+            user = new User(name);
+            log("new user created: " + name, "notification");
         }
     }
 
@@ -55,19 +53,19 @@ io.on("connection", function(socket) {
 
     socket.on("reply info", (data) => {
         user = new User(data.name);
+        log("got name: " + data.name);
         socket.emit("logged in", {
             image: canvas.get_image(),
         });
     });
 
     socket.on("position update", (data) => {
-        if (user_exists()) {
-            //when an update comes in
-            user.x = data.pos.x; user.y = data.pos.y;
-            user.tool = data.tool;
-            //ping an update back
-            socket.emit("server update", get_users(user));
-        }
+        user_exists(data.name);
+        //when an update comes in
+        user.x = data.pos.x; user.y = data.pos.y;
+        user.tool = data.tool;
+        //ping an update back
+        socket.emit("server update", get_users(user));
     });
 
     socket.on("drawing", (data) => {
@@ -77,11 +75,10 @@ io.on("connection", function(socket) {
     });
 
     socket.on("send message", (data) => {
-        if (user_exists()) {
-            var message = user.name + ": " + data;
-            log(message, "chat");
-            socket.broadcast.emit("incoming message", user.name + ": " + data);
-        }
+        user_exists(data.name);
+        var message = user.name + ": " + data;
+        log(message, "chat");
+        socket.broadcast.emit("incoming message", user.name + ": " + data);
     });
 
     socket.on("disconnect", (data) => {

@@ -174,6 +174,7 @@ var tools = {
                     image_cxt.fill();
 
                     socket.emit("drawing", {
+                        name: name,
                         colour: current_colour,
                         tool: "pencil",
                         start: this.last_pos,
@@ -218,6 +219,7 @@ var tools = {
                 image_cxt.clearRect(mouse.pos.x - length,
                     mouse.pos.y - length, length * 2, length * 2);
                 socket.emit("drawing", {
+                    name: name,
                     size: draw_size,
                     tool: "eraser",
                     x: mouse.pos.x, y: mouse.pos.y,
@@ -316,9 +318,10 @@ socket.on("draw", (data) => {
     }
 });
 
+/*
 socket.on("request info", function() {
-    socket.emit("reply info", name);
-});
+    socket.emit("reply info", { name: name });
+}); */
 
 socket.on("incoming message", function(data) {
     add_message(data, "message");
@@ -331,6 +334,6 @@ socket.on("notification", function(data) {
 function cycle() {
     control_cxt.clearRect(0, 0, control_layer.width, control_layer.height);
     tools[current_tool].update();
-    socket.emit("position update", { pos: mouse.pos, tool: current_tool, });
+    socket.emit("position update", { name: name, pos: mouse.pos, tool: current_tool, });
     requestAnimationFrame(cycle);
 }
