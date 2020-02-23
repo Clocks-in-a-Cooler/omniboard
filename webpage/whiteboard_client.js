@@ -272,13 +272,21 @@ function toggle_controls() {
     controls.style.visibility = visibility == "hidden" ? "visible" : "hidden";
 }
 
+//for zzfx
+var notification_sound = 0;
+var message_sound = 43011;
+var new_user_sound = 3146;
+
 var send_message = document.getElementById("send_message");
 
 send_message.addEventListener("submit", function(evt) {
     evt.preventDefault();
-    socket.emit("send message", send_message.message.value);
-    add_message(send_message.message.value, "my_message");
-    send_message.message.value = "";
+    var message = send_message.message.value; message = message.trim();
+    if (message != "") {
+        socket.emit("send message", send_message.message.value);
+        add_message(send_message.message.value, "my_message");
+        send_message.message.value = "";
+    }
 });
 
 var messages_panel = document.getElementById("messages");
@@ -288,6 +296,11 @@ function add_message(message, type) {
     m.innerHTML = message;
     messages_panel.appendChild(m);
     messages_panel.scrollTo(0, messages_panel.scrollHeight);
+    if (type == "message" || "my_message") {
+        ZZFX.z(message_sound);
+    } else if (type == "notification") {
+        ZZFX.z(notification_sound);
+    }
 }
 
 //events from the server
