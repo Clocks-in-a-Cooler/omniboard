@@ -335,6 +335,10 @@ socket.on("disconnect", function() {
     add_message("you've been disconnected. you can still draw and save the board, though.", "notification");
 });
 
+socket.on("user count update", function(data) {
+    document.getElementById("users_counter").innerHTML = "users: " + data;
+});
+
 socket.on("reconnect", function() {
     add_message("connection restored.", "notification");
 });

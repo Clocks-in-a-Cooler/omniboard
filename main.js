@@ -26,6 +26,11 @@ app.get('/', function(req, res) {
 });
 
 var users = [];
+var users_count = 0;
+
+function update_users_count() {
+    io.emit("user count update", users_count);
+}
 
 io.on("connection", function(socket) {
     log("a new connection is coming...");
@@ -36,6 +41,8 @@ io.on("connection", function(socket) {
         if (user == null) {
             user = new User(name);
             log("new user created: " + name, "notification");
+            users_count++;
+            update_users_count();
         }
     }
 
@@ -45,6 +52,8 @@ io.on("connection", function(socket) {
         users.push(user);
         if (user != null) {
             socket.broadcast.emit("notification", user.name + " has joined! Welcome!");
+            users_count++;
+            update_users_count();
         }
         socket.emit("logged in", {
             image: canvas.get_image(),
@@ -85,6 +94,8 @@ io.on("connection", function(socket) {
         if (user != null) {
             user.online = false;
             socket.broadcast.emit("notification", user.name + " has disconnected");
+            users_count--;
+            update_users_count();
         }
         log("user at " + address + " has disconnected.", "notification");
     });

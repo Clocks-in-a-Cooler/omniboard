@@ -74,6 +74,15 @@ body {
     transition: background-color .5s, color .5s;
 }
 
+#users_counter {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.75);
+    bottom: 0px; left: 0px;
+    padding: 0.5em;
+    font-size: 11pt;
+    color: dimgrey;
+}
+
 canvas {
     position: absolute;
     top: 0px; left: 0px;
