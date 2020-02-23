@@ -1,10 +1,15 @@
 var form = document.getElementById("login_form");
 var socket = io();
+var name = "";
 
 form.addEventListener("submit", function(event) {
     event.preventDefault();
-    console.log("name: " + form.username.value);
-    socket.emit("login", { name: form.username.value });
+    name = form.username.value.trim();
+    if (name == "") {
+        name = "anonymous";
+    }
+    console.log("name: " + name);
+    socket.emit("login", { name: name });
     //...and we wait for the reply from the server
 });
 
@@ -38,7 +43,7 @@ function create_rbutton_group(element, callback) {
             buttons.forEach((u) => {
                 u.className = "rbutton";
             });
-            
+
             b.className += " selected";
             callback(b.id);
         });
@@ -97,11 +102,11 @@ function addEventListeners() {
     addEventListener("click", mouse.click);
 
     addEventListener("wheel", mouse.scroll);
-    
+
     document.getElementById("download").addEventListener("click", () => {
         save_image();
     });
-    
+
     /*
     control_layer.addEventListener("keyup", function(evt) {
         switch (evt.key) {
@@ -157,7 +162,7 @@ var tools = {
                     image_cxt.lineTo(mouse.pos.x, mouse.pos.y);
                     image_cxt.closePath();
                     image_cxt.stroke();
-                    
+
                     image_cxt.beginPath();
                     image_cxt.moveTo(this.last_pos.x, this.last_pos.y);
                     image_cxt.arc(this.last_pos.x, this.last_pos.y,
@@ -167,8 +172,9 @@ var tools = {
                         draw_size * 0.5, 0, Math.PI * 2);
                     image_cxt.closePath();
                     image_cxt.fill();
-                    
+
                     socket.emit("drawing", {
+                        name: name,
                         colour: current_colour,
                         tool: "pencil",
                         start: this.last_pos,
@@ -176,26 +182,26 @@ var tools = {
                         size: draw_size,
                     });
                 }
-                
+
                 this.last_pos = mouse.pos;
             } else {
                 this.last_pos = null;
             }
-            
+
             draw_others();
             control_cxt.drawImage(orange_pencil, mouse.pos.x, mouse.pos.y - 30);
         },
-        
+
         draw: function(data) {
             image_cxt.strokeStyle = image_cxt.fillStyle = data.colour;
             image_cxt.lineWidth = data.size;
-            
+
             image_cxt.beginPath();
             image_cxt.moveTo(data.start.x, data.start.y);
             image_cxt.lineTo(data.end.x, data.end.y);
             image_cxt.closePath();
             image_cxt.stroke();
-            
+
             image_cxt.beginPath();
             image_cxt.moveTo(data.start.x, data.start.y);
             image_cxt.arc(data.start.x, data.start.y, data.size / 2, 0, Math.PI * 2);
@@ -205,7 +211,7 @@ var tools = {
             image_cxt.fill();
         },
     },
-    
+
     "eraser": {
         update: function() {
             var length = this.get_size(draw_size);
@@ -213,12 +219,13 @@ var tools = {
                 image_cxt.clearRect(mouse.pos.x - length,
                     mouse.pos.y - length, length * 2, length * 2);
                 socket.emit("drawing", {
+                    name: name,
                     size: draw_size,
                     tool: "eraser",
                     x: mouse.pos.x, y: mouse.pos.y,
                 });
             }
-                        
+
             //draw on screen
             control_cxt.strokeStyle = "black";
             control_cxt.lineWidth = 2;
@@ -226,11 +233,11 @@ var tools = {
                 length * 2, length * 2);
             draw_others();
         },
-        
+
         get_size: function(size) {
             return size * 3.64 + 1.77;
         },
-        
+
         draw: function(data) {
             var eraser_size = this.get_size(data.size);
             image_cxt.clearRect(data.x - eraser_size, data.y - eraser_size,
@@ -244,6 +251,9 @@ var current_tool = "pencil";
 
 create_rbutton_group(document.getElementById("colour_controls"), (data) => {
     current_colour = data;
+    if (current_tool == "eraser") {
+        current_tool = "pencil";
+    }
 });
 
 create_rbutton_group(document.getElementById("tools"), (data) => {
@@ -284,7 +294,7 @@ function add_message(message, type) {
 socket.on("logged in", (data) => {
     document.body.removeChild(document.getElementById("mask"));
     document.body.removeChild(document.getElementById("login_box"));
-    
+
     var img = new Image();
     img.src = data.image;
     img.onload = function() { image_cxt.drawImage(img, 0, 0); };
@@ -308,6 +318,11 @@ socket.on("draw", (data) => {
     }
 });
 
+/*
+socket.on("request info", function() {
+    socket.emit("reply info", { name: name });
+}); */
+
 socket.on("incoming message", function(data) {
     add_message(data, "message");
 });
@@ -316,9 +331,21 @@ socket.on("notification", function(data) {
     add_message(data, "notification");
 });
 
+socket.on("disconnect", function() {
+    add_message("you've been disconnected. you can still draw and save the board, though.", "notification");
+});
+
+socket.on("user count update", function(data) {
+    document.getElementById("users_counter").innerHTML = "users: " + data;
+});
+
+socket.on("reconnect", function() {
+    add_message("connection restored.", "notification");
+});
+
 function cycle() {
     control_cxt.clearRect(0, 0, control_layer.width, control_layer.height);
     tools[current_tool].update();
-    socket.emit("position update", { pos: mouse.pos, tool: current_tool, });
+    socket.emit("position update", { name: name, pos: mouse.pos, tool: current_tool, });
     requestAnimationFrame(cycle);
 }

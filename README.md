@@ -1,12 +1,16 @@
 # omniboard
 
-> a collaborate virtual whiteboard with a lot of libraries (because I actually don't know how to code)
+> a collaborative virtual whiteboard with a lot of libraries (because I actually don't know how to code)
 
 ## Setup
+
+You will need [git](https://git-scm.com/) and [Node.js](https://nodejs.org/en/) installed, as well as access to the command line.
 
 1. Clone or download this repository.
 
     `git clone https://github.com/clocks-in-a-cooler/omniboard`
+    
+    And then `cd omniboard`
     
 2. Install some dependencies.
 
@@ -20,6 +24,8 @@
 
     Open a browser and go to `localhost:3000`.
     
+For a production version of Omniboard, use the `release` branch.
+
 ## License
 
-I'll add one soon.
+MIT License. Use this however you want.

@@ -38,7 +38,12 @@ function get_date() {
 }
 
 //custom log function
-var fs         = require("fs");
+var fs = require("fs");
+
+if (!fs.existsSync("logs")) {
+    fs.mkdirSync("logs");
+}
+
 var log_stream = fs.createWriteStream("logs/log" + get_date() + ".txt", {'flags': 'a'});
 
 function log(msg, type) {

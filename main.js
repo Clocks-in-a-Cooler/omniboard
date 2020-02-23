@@ -26,44 +26,77 @@ app.get('/', function(req, res) {
 });
 
 var users = [];
+var users_count = 0;
+
+function update_users_count() {
+    io.emit("user count update", users_count);
+}
 
 io.on("connection", function(socket) {
     log("a new connection is coming...");
     var address = socket.handshake.address, id = socket.id;
     var user;
+
+    function user_exists(name) {
+        if (user == null) {
+            user = new User(name);
+            log("new user created: " + name, "notification");
+            users_count++;
+            update_users_count();
+        }
+    }
+
     socket.on("login", (data) => {
         log(data.name + " (socket id: "+ id + ") connecting from " + address);
         user = new User(data.name);
         users.push(user);
-        socket.broadcast.emit("notification", user.name + " has joined! Welcome!");
+        if (user != null) {
+            socket.broadcast.emit("notification", user.name + " has joined! Welcome!");
+            users_count++;
+            update_users_count();
+        }
         socket.emit("logged in", {
             image: canvas.get_image(),
         });
     });
-    
+
+    socket.on("reply info", (data) => {
+        user = new User(data.name);
+        log("got name: " + data.name);
+        socket.emit("logged in", {
+            image: canvas.get_image(),
+        });
+    });
+
     socket.on("position update", (data) => {
+        user_exists(data.name);
         //when an update comes in
         user.x = data.pos.x; user.y = data.pos.y;
         user.tool = data.tool;
         //ping an update back
         socket.emit("server update", get_users(user));
     });
-    
+
     socket.on("drawing", (data) => {
         //interpret and broadcast the data
         canvas.draw(data);
         socket.broadcast.emit("draw", data);
     });
-    
+
     socket.on("send message", (data) => {
+        user_exists(data.name);
         var message = user.name + ": " + data;
         log(message, "chat");
         socket.broadcast.emit("incoming message", user.name + ": " + data);
     });
-    
+
     socket.on("disconnect", (data) => {
-        if (user != null) user.online = false;
-        socket.broadcast.emit("notification", user.name + " has disconnected");
+        if (user != null) {
+            user.online = false;
+            socket.broadcast.emit("notification", user.name + " has disconnected");
+            users_count--;
+            update_users_count();
+        }
         log("user at " + address + " has disconnected.", "notification");
     });
 });
@@ -77,7 +110,7 @@ function get_users(user) {
             tool: u.tool, name: u.name,
         };
     });
-    
+
     return users_data;
 };
 
@@ -85,7 +118,7 @@ function update() {
     users = users.filter(u => {
         return u.online;
     });
-    
+
     setImmediate(update);
 }
 
