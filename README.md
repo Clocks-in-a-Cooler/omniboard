@@ -26,6 +26,22 @@ You will need [git](https://git-scm.com/) and [Node.js](https://nodejs.org/en/) 
     
 For a production version of Omniboard, use the `release` branch.
 
+## Credits
+
+Omniboard won't be possible without these libraries and their awesome contributors:
+
+* server framework &mdash; [express](https://expressjs.com/)
+
+* WebSocket handler &mdash; [socket.io](https://socket.io/)
+
+* canvas for the server side &mdash; [node-canvas](https://github.com/Automattic/node-canvas)
+
+* sound for the client notifications &mdash; [zzfx](https://zzfx.3d2k.com/)
+
+* database for chat messages &mdash; [lowdb](https://github.com/typicode/lowdb)
+
+* hashing algorithms &mdash; [jshashes](https://github.com/h2non/jshashes)
+
 ## License
 
 MIT License. Use this however you want.
