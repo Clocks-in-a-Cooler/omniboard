@@ -141,14 +141,15 @@ function draw_others() {
     });
 }
 
+/*
 var tools = {
-    /*
-        data to send:
-        [x] size of pencil/eraser
-        [x] position of the mouse (start and end for pencil, x and y for eraser)
-        [x] current tool (so that the data can be interpreted properly
-        [x] colour
-    */
+
+        // data to send:
+        // [x] size of pencil/eraser
+        // [x] position of the mouse (start and end for pencil, x and y for eraser)
+        // [x] current tool (so that the data can be interpreted properly
+        // [x] colour
+        
     "pencil": {
         last_pos: null,
         update: function() {
@@ -245,7 +246,7 @@ var tools = {
         },
     },
 };
-
+*/
 var current_colour = "dodgerblue";
 var current_tool = "pencil";
 
@@ -346,6 +347,7 @@ socket.on("notification", function(data) {
 
 socket.on("disconnect", function() {
     add_message("you've been disconnected. you can still draw and save the board, though.", "notification");
+    document.getElementById("users_counter").innerHTML = "<span style=\"color: indianred;\">offline</span>";
 });
 
 socket.on("user count update", function(data) {
