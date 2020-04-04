@@ -86,6 +86,10 @@ var mouse = {
     },
 };
 
+var keys = {
+    shift: false,
+};
+
 function addEventListeners() {
     addEventListener("mousedown", function() {
         mouse.clicking = true;
@@ -105,6 +109,22 @@ function addEventListeners() {
 
     document.getElementById("download").addEventListener("click", () => {
         save_image();
+    });
+    
+    addEventListener("keydown", (evt) => {
+        switch (evt.keyCode) {
+            case 16:
+                keys.shift = true;
+                break;
+        }
+    });
+    
+    addEventListener("keyup", (evt) => {
+        switch (evt.keyCode) {
+            case 16:
+                keys.shift = false;
+                break;
+        }
     });
 
     /*
@@ -130,6 +150,8 @@ function draw_others() {
     control_cxt.textAlign = "center";
     others.forEach(u => {
         switch (u.tool) {
+            case "line":
+            case "rectangle":
             case "pencil":
                 control_cxt.drawImage(blue_pencil, u.x, u.y - 30);
                 break;
@@ -216,16 +238,7 @@ socket.on("server update", (data) => {
 
 socket.on("draw", (data) => {
     //the same as canvas.js on the server side!
-    /*
-    switch (data.tool) {
-        case "pencil":
-            tools.pencil.draw(data);
-            break;
-        case "eraser":
-            tools.eraser.draw(data);
-            break;
-    }*/
-    tools[data.tool].draw(data);
+    tools[data.tool].draw(data, image_cxt);
 });
 
 /*

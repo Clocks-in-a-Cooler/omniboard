@@ -135,20 +135,9 @@ var tools = {
             }
             
             //draw the crosshair
-            with (control_cxt) { // i'm using this structure
-                save();
-                strokeStyle = current_colour;
-                lineWidth = 2;
-                translate(mouse.pos.x, mouse.pos.y);
-                beginPath();
-                moveTo(0, 25);
-                lineTo(0, -25);
-                moveTo(-25, 0);
-                lineTo(25, 0);
-                closePath();
-                stroke();
-                restore();
-            }
+            this.draw_crosshair();
+            
+            draw_others();
         },
         
         draw: function(data, cxt) {
@@ -161,12 +150,119 @@ var tools = {
             cxt.closePath();
             cxt.stroke();
         },
+        
+        draw_crosshair: function() {
+            //browser only, not executed on the server side
+            with (control_cxt) { // i'm using this structure
+                save();
+                strokeStyle = current_colour;
+                lineWidth = 2;
+                translate(mouse.pos.x, mouse.pos.y);
+                beginPath();
+                moveTo(0, 10);
+                lineTo(0, -10);
+                moveTo(-10, 0);
+                lineTo(10, 0);
+                closePath();
+                stroke();
+                restore();
+            }
+        }
+    },
+    
+    "rectangle": {
+        starting_pos: null,
+        update: function() {
+            //browser only, not run on the server side.
+            if (mouse.clicking) {
+                if (this.starting_pos != null) {
+                    var end_pos = this.get_end_pos();
+                                        
+                    var data = {
+                        start: this.starting_pos,
+                        end: end_pos,
+                        size: draw_size,
+                        colour: current_colour,
+                    };
+                    
+                    //draw that to the control layer
+                    this.draw(data, control_cxt);
+                } else {
+                    this.starting_pos = mouse.pos;
+                }
+            } else {
+                if (this.starting_pos != null) {
+                    //for realsies this time to the image layer
+                    var data = {
+                        tool: "rectangle",
+                        start: this.starting_pos,
+                        end: this.get_end_pos(),
+                        size: draw_size,
+                        colour: current_colour,
+                    };
+                    
+                    this.draw(data, image_cxt);
+                    
+                    //send it to the server
+                    socket.emit("drawing", data);
+                    this.starting_pos = null;
+                }
+            }
+            
+            tools.line.draw_crosshair();
+            
+            draw_others();
+        },
+        
+        draw: function(data, cxt) {
+            cxt.strokeStyle = data.colour;
+            cxt.lineWidth = data.size;
+            var width = data.end.x - data.start.x;
+            var height = data.end.y - data.start.y;
+            cxt.strokeRect(data.start.x, data.start.y, width, height);
+        },
+        
+        get_end_pos: function() {
+            //client-side only, not executed on the server side
+            if (!keys.shift) {
+                return mouse.pos;
+            }
+            
+            var end_pos = mouse.pos;
+            
+            var side_length = Math.min(
+                Math.abs(this.starting_pos.x - end_pos.x),
+                Math.abs(this.starting_pos.y - end_pos.y)
+            );
+            
+            end_pos.x = this.starting_pos.x + (side_length * Math.sign(end_pos.x - this.starting_pos.x));
+            end_pos.y = this.starting_pos.y + (side_length * Math.sign(end_pos.y - this.starting_pos.y));
+            
+            return end_pos;
+        },
     },
 
     draw: function(data, cxt) {
         tools[data.tool].draw(data, cxt);
     },
 };
+
+function get_angle(start, end, degrees) {
+    var opp = end.y - start.y;
+    var hyp = Math.hypot(start.y - end.y, start.x - end.x);
+    
+    var angle = Math.asin(opp / hyp);
+    
+    if (start.x < end.x) {
+        angle = Math.PI - angle;
+    }
+    
+    if (degrees) {
+        angle = angle * 180 / Math.PI;
+    }
+    
+    return angle;
+}
 
 try {
     if (window) {
