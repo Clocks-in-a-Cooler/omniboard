@@ -1,5 +1,6 @@
 var tools = {
     "pencil": {
+        last_pos: null,
         update: function() {
             //browser only, won't be run on the server side
             if (mouse.clicking) {
@@ -95,6 +96,61 @@ var tools = {
     },
     
     "line": {
+        starting_pos: null,
+        update: function() {
+            if (mouse.clicking) {
+                if (this.starting_pos != null) {
+                    //create a data object to draw on the control layer
+                    this.draw({
+                        colour: current_colour,
+                        size: draw_size,
+                        start: this.starting_pos,
+                        end: mouse.pos,
+                        tool: "line",
+                    }, control_cxt);
+                } else {
+                    this.starting_pos = mouse.pos;
+                }
+            } else {
+                if (this.starting_pos != null) {
+                    //the mouse is released
+                    
+                    //make the data
+                    var data = {
+                        colour: current_colour,
+                        size: draw_size,
+                        start: this.starting_pos,
+                        end: mouse.pos,
+                        tool: "line",
+                    };
+                    
+                    //draw the data
+                    this.draw(data, image_cxt);
+                    
+                    //send the data
+                    socket.emit("drawing", data);
+                    
+                    this.starting_pos = null;
+                }
+            }
+            
+            //draw the crosshair
+            with (control_cxt) { // i'm using this structure
+                save();
+                strokeStyle = current_colour;
+                lineWidth = 2;
+                translate(mouse.pos.x, mouse.pos.y);
+                beginPath();
+                moveTo(0, 25);
+                lineTo(0, -25);
+                moveTo(-25, 0);
+                lineTo(25, 0);
+                closePath();
+                stroke();
+                restore();
+            }
+        },
+        
         draw: function(data, cxt) {
             cxt.strokeStyle = data.colour;
             cxt.lineWidth = data.size;

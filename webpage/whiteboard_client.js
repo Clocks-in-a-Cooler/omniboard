@@ -141,112 +141,6 @@ function draw_others() {
     });
 }
 
-/*
-var tools = {
-
-        // data to send:
-        // [x] size of pencil/eraser
-        // [x] position of the mouse (start and end for pencil, x and y for eraser)
-        // [x] current tool (so that the data can be interpreted properly
-        // [x] colour
-        
-    "pencil": {
-        last_pos: null,
-        update: function() {
-            if (mouse.clicking) {
-                if (this.last_pos != null) {
-                    //draw!
-                    image_cxt.fillStyle = image_cxt.strokeStyle = current_colour;
-                    image_cxt.lineWidth = draw_size;
-                    image_cxt.beginPath();
-                    image_cxt.moveTo(this.last_pos.x, this.last_pos.y);
-                    image_cxt.lineTo(mouse.pos.x, mouse.pos.y);
-                    image_cxt.closePath();
-                    image_cxt.stroke();
-
-                    image_cxt.beginPath();
-                    image_cxt.moveTo(this.last_pos.x, this.last_pos.y);
-                    image_cxt.arc(this.last_pos.x, this.last_pos.y,
-                        draw_size * 0.5, 0, Math.PI * 2);
-                    image_cxt.moveTo(mouse.pos.x, mouse.pos.y);
-                    image_cxt.arc(mouse.pos.x, mouse.pos.y,
-                        draw_size * 0.5, 0, Math.PI * 2);
-                    image_cxt.closePath();
-                    image_cxt.fill();
-
-                    socket.emit("drawing", {
-                        name: name,
-                        colour: current_colour,
-                        tool: "pencil",
-                        start: this.last_pos,
-                        end: mouse.pos,
-                        size: draw_size,
-                    });
-                }
-
-                this.last_pos = mouse.pos;
-            } else {
-                this.last_pos = null;
-            }
-
-            draw_others();
-            control_cxt.drawImage(orange_pencil, mouse.pos.x, mouse.pos.y - 30);
-        },
-
-        draw: function(data) {
-            image_cxt.strokeStyle = image_cxt.fillStyle = data.colour;
-            image_cxt.lineWidth = data.size;
-
-            image_cxt.beginPath();
-            image_cxt.moveTo(data.start.x, data.start.y);
-            image_cxt.lineTo(data.end.x, data.end.y);
-            image_cxt.closePath();
-            image_cxt.stroke();
-
-            image_cxt.beginPath();
-            image_cxt.moveTo(data.start.x, data.start.y);
-            image_cxt.arc(data.start.x, data.start.y, data.size / 2, 0, Math.PI * 2);
-            image_cxt.moveTo(data.end.x, data.end.y);
-            image_cxt.arc(data.end.x, data.end.y, data.size / 2, 0, Math.PI * 2);
-            image_cxt.closePath();
-            image_cxt.fill();
-        },
-    },
-
-    "eraser": {
-        update: function() {
-            var length = this.get_size(draw_size);
-            if (mouse.clicking) {
-                image_cxt.clearRect(mouse.pos.x - length,
-                    mouse.pos.y - length, length * 2, length * 2);
-                socket.emit("drawing", {
-                    name: name,
-                    size: draw_size,
-                    tool: "eraser",
-                    x: mouse.pos.x, y: mouse.pos.y,
-                });
-            }
-
-            //draw on screen
-            control_cxt.strokeStyle = "black";
-            control_cxt.lineWidth = 2;
-            control_cxt.strokeRect(mouse.pos.x - length, mouse.pos.y - length,
-                length * 2, length * 2);
-            draw_others();
-        },
-
-        get_size: function(size) {
-            return size * 3.64 + 1.77;
-        },
-
-        draw: function(data) {
-            var eraser_size = this.get_size(data.size);
-            image_cxt.clearRect(data.x - eraser_size, data.y - eraser_size,
-                eraser_size * 2, eraser_size * 2);
-        },
-    },
-};
-*/
 var current_colour = "dodgerblue";
 var current_tool = "pencil";
 
@@ -322,6 +216,7 @@ socket.on("server update", (data) => {
 
 socket.on("draw", (data) => {
     //the same as canvas.js on the server side!
+    /*
     switch (data.tool) {
         case "pencil":
             tools.pencil.draw(data);
@@ -329,7 +224,8 @@ socket.on("draw", (data) => {
         case "eraser":
             tools.eraser.draw(data);
             break;
-    }
+    }*/
+    tools[data.tool].draw(data);
 });
 
 /*

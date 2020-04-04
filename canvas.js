@@ -63,7 +63,7 @@ module.exports = {
     },
 
     draw: function(data) {
-        switch (data.tool) {
+        /*switch (data.tool) {
             case "pencil":
                 //pencil code
                 pencil(data);
@@ -72,7 +72,8 @@ module.exports = {
                 //eraser code
                 eraser(data);
                 break;
-        }
+        }*/
+        tools[data.tool].draw(data, cxt);
     },
 
     save_image: save_image,
