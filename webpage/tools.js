@@ -241,11 +241,105 @@ var tools = {
             return end_pos;
         },
     },
+    
+    "fill": {
+        "update": function() {
+            //draw a paint bucket
+        },
+        
+        "draw": function(data, cxt) {
+            
+        },
+    },
+    
+    "circle": {
+        // similar to the rectangle tool
+        starting_pos: null,
+        update: function() {
+            // browser only, not on the server side
+            if (mouse.clicking) {
+                if (this.starting_pos != null) {
+                    var end_pos = this.get_end_pos();
+                                        
+                    var data = {
+                        start: this.starting_pos,
+                        end: end_pos,
+                        size: draw_size,
+                        colour: current_colour,
+                    };
+                    
+                    //draw that to the control layer
+                    this.draw(data, control_cxt);
+                } else {
+                    this.starting_pos = mouse.pos;
+                }
+            } else {
+                if (this.starting_pos != null) {
+                    //for realsies this time to the image layer
+                    var data = {
+                        tool: "circle",
+                        start: this.starting_pos,
+                        end: this.get_end_pos(),
+                        size: draw_size,
+                        colour: current_colour,
+                    };
+                    
+                    this.draw(data, image_cxt);
+                    
+                    //send it to the server
+                    socket.emit("drawing", data);
+                    this.starting_pos = null;
+                }
+            }
+            
+            draw_others();
+        },
+        
+        draw: function(data, cxt) {
+            cxt.strokeStyle = data.colour;
+            cxt.lineWidth = data.size;
+            
+            // draw the arc
+            // we need the center and two radii
+            var radius_x = Math.abs(data.end.x - data.start.x) / 2;
+            var radius_y = Math.abs(data.end.y - data.start.y) / 2;
+            var center_x = Math.min(data.start.x, data.end.x) + radius_x;
+            var center_y = Math.min(data.start.y, data.end.y) + radius_y;
+            
+            cxt.beginPath();
+            cxt.ellipse(center_x, center_y, radius_x, radius_y, 0, 0, Math.PI * 2);
+            cxt.closePath();
+            cxt.stroke();
+        },
+        
+        get_end_pos: function() {
+            //client-side only, not executed on the server side
+            if (!keys.shift) {
+                return mouse.pos;
+            }
+            
+            var end_pos = mouse.pos;
+            
+            var side_length = Math.min(
+                Math.abs(this.starting_pos.x - end_pos.x),
+                Math.abs(this.starting_pos.y - end_pos.y)
+            );
+            
+            end_pos.x = this.starting_pos.x + (side_length * Math.sign(end_pos.x - this.starting_pos.x));
+            end_pos.y = this.starting_pos.y + (side_length * Math.sign(end_pos.y - this.starting_pos.y));
+            
+            return end_pos;
+        },
+    },
 
     draw: function(data, cxt) {
         tools[data.tool].draw(data, cxt);
     },
 };
+
+function get_end_pos(starting_pos) {
+    
+}
 
 function get_angle(start, end, degrees) {
     var opp = end.y - start.y;

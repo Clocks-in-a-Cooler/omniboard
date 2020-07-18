@@ -152,6 +152,7 @@ function draw_others() {
         switch (u.tool) {
             case "line":
             case "rectangle":
+            case "circle":
             case "pencil":
                 control_cxt.drawImage(blue_pencil, u.x, u.y - 30);
                 break;
