@@ -5,7 +5,7 @@
     "main": "main.js",
     "dependencies": {
         "express": "^4.16.4",
-        "socket.io": "^1.7.4",
+        "socket.io": "^2.4.0",
         "lowdb": "latest",
         "canvas": "2.6.1",
         "jshashes": "1.0.7"
