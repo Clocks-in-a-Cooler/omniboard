@@ -27,25 +27,6 @@ function get_eraser_size(size) {
     return size * 3.64 + 1.77; //magic math, that's what.
 }
 
-function pencil(data) {
-    cxt.strokeStyle = cxt.fillStyle = data.colour;
-    cxt.lineWidth = data.size;
-
-    cxt.beginPath();
-    cxt.moveTo(data.start.x, data.start.y);
-    cxt.lineTo(data.end.x, data.end.y);
-    cxt.closePath();
-    cxt.stroke();
-
-    cxt.beginPath();
-    cxt.moveTo(data.start.x, data.start.y);
-    cxt.arc(data.start.x, data.start.y, data.size / 2, 0, Math.PI * 2);
-    cxt.moveTo(data.end.x, data.end.y);
-    cxt.arc(data.end.x, data.end.y, data.size / 2, 0, Math.PI * 2);
-    cxt.closePath();
-    cxt.fill();
-}
-
 function save_image() { //again, courtesy of Julian Lannigan on Stack Overflow
     var data = canvas.toDataURL().slice(22);
     var image_buffer = new Buffer(data, "base64");
@@ -63,16 +44,6 @@ module.exports = {
     },
 
     draw: function(data) {
-        /*switch (data.tool) {
-            case "pencil":
-                //pencil code
-                pencil(data);
-                break;
-            case "eraser":
-                //eraser code
-                eraser(data);
-                break;
-        }*/
         tools[data.tool].draw(data, cxt);
     },
 
