@@ -46,6 +46,12 @@ if (!fs.existsSync("logs")) {
 
 var log_stream = fs.createWriteStream("logs/log" + get_date() + ".txt", {'flags': 'a'});
 
+/**
+ * 
+ * @param { string } msg 
+ * @param { string } type 
+ * @returns 
+ */
 function log(msg, type) {
     msg  = msg.trim();
     type = type || "info";

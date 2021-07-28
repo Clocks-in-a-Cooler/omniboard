@@ -1,148 +1,39 @@
 html, body {
     position: absolute;
-    padding: 0px;
-    border: 0px;
-    margin: 0px;
-    top: 0px; left: 0px;
+    margin: 0; border: 0; padding: 0;
+    top: 0; left: 0;
     width: 100%; height: 100%;
     overflow: hidden;
 }
 
-body {
-    background-image: url("blank.png");
+div {
+    margin: 0; border: 0; padding: 0;
+    display: block;
 }
 
-/* nothing here works! I'm terrible at CSS! */
-#login_box {
+p {
+    margin: 0;
+    padding: 3px;
+}
+
+button {
+    margin: 0; border: 0; padding: 0;
+    border-radius: 7px;
+    background-color: rgb(206, 206, 206);
+}
+
+button:hover {
+    border-color: rgb(107, 107, 107);
+}
+
+.centered {
     position: absolute;
-    overflow-y: scroll;
-    overflow-x: auto;
-    width: 50%;
-    height: 50%;
-    background-color: salmon;
-    padding: 5px;
-    /* center the thing on the page, dammit. it took this long. */
-    top: 0; left: 0; bottom: 0; right: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     margin: auto;
-}
-
-#mask {
-    position: absolute;
-    width: 100%; height: 100%;
-    background-color: aliceblue;
-    opacity: 0.7;
-}
-
-#controls {
-    position: absolute;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    width: 110px; height: 500px;
-    top: 50px; left: 0px;
-    border: 1px solid black;
-    background-color: white;
-}
-
-.rbutton {
-    border-radius: 5px;
-    border: 1px solid gray;
-    width: 40px; height: 40px;
-    margin: 2px;
-    display: inline;
-}
-
-.selected {
-    border: 1px solid hotpink;
-}
-
-#instructions {
-    font-size: 8pt;
-    padding: 5px;
-}
-
-#download {
-    color: forestgreen;
-    border: 1px solid forestgreen;
-    border-radius: 5px;
-    background-color: white;
-    transition: background-color .5s, color .5s;
-}
-
-#download:hover {
-    color: white;
-    background-color: forestgreen;
-    transition: background-color .5s, color .5s;
-}
-
-#users_counter {
-    position: absolute;
-    background-color: rgba(255, 255, 255, 0.75);
-    bottom: 0px; left: 0px;
-    padding: 0.5em;
-    font-size: 11pt;
-    color: dimgrey;
 }
 
 canvas {
     position: absolute;
-    top: 0px; left: 0px;
-}
-
-#chat {
-    position: absolute;
-    background-color: white;
-    border: 1px solid black;
-    left: auto;
-    top: 0px; right: 0px;
-    width: 400px;
-    height: 100%;
-}
-
-#messages {
-    position: absolute;
-    top:0px; bottom: 2.5em;
-    overflow-y: scroll;
-    width: 100%;
-    border-bottom: 1px solid black;
-}
-
-#send_message {
-    position: absolute;
-    bottom: 0px;
-    width: 100%; height: 2em;
-    padding-left: 0.5em;
-    padding-top: 0.5em;
-}
-
-.message {
-    width: 70%;
-    margin: 5px;
-    padding: 5px;
-    float: left;
-    color: royalblue;
-    background-color: powderblue;
-    border: 1px solid royalblue;
-    border-radius: 3px;
-}
-
-.my_message {
-    width: 70%;
-    margin: 5px;
-    padding: 5px;
-    float: right;
-    color: darkorange;
-    background-color: khaki;
-    border: 1px solid darkorange;
-    border-radius: 3px;
-}
-
-.notification {
-    width: 70%;
-    margin: 5px;
-    padding: 5px;
-    float: right;
-    color: darkslategray;
-    background-color: white;
-    border: 1px solid darkslategray;
-    border-radius: 3px;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
 }

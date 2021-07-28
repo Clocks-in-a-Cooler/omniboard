@@ -1,0 +1,44 @@
+#chat {
+    position: absolute;
+    top: 372px; left: 5px;
+    width: 400px; height: 450px;
+    border: 1px solid black;
+    background-color: white;
+}
+
+#messages {
+    position: absolute;
+    top: 2em; bottom: 2.5em;
+    overflow-y: scroll;
+    width: 100%;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+#messages .message {
+    border: 1px solid black;
+    user-select: text;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+}
+
+#send_message {
+    position: absolute;
+    bottom: 0;
+    padding-top: 3px;
+    height: 2.5em;
+    width: 100%;
+}
+
+#input_message {
+    margin-top: 1%;
+    left: 3px;
+    width: 375px;
+}
+
+#submit_message {
+    visibility: hidden;
+}

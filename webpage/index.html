@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Omniboard</title>
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="controls_style.css" />
+        <link rel="stylesheet" href="chat_style.css" />
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <canvas id="image_layer"></canvas>
+        <canvas id="control_layer"></canvas>
+        <div id="controls">
+            <p>Tools</p>
+            <div id="tools">
+                <button class="tool_button" id="pencil"></button>
+                <button class="tool_button" id="eraser"></button>
+                <button class="tool_button" id="line"></button>
+                <button class="tool_button" id="rectangle"></button>
+                <button class="tool_button" id="circle"></button>
+                <button class="tool_button" id="fill"></button>
+            </div>
+            <hr />
+            <p id="size_label">Size</p>
+            <div id="size">
+                <input type="range" min="2" max="20" value="5" class="slider" step="0.1" id="size_slider" />
+            </div>
+            <hr />
+            <p>Colour</p>
+            <div id="colours">
+                <button class="colour_button" id="red"></button>
+                <button class="colour_button" id="orange"></button>
+                <button class="colour_button" id="yellow"></button>
+                <button class="colour_button" id="lime"></button>
+                <button class="colour_button" id="forestgreen"></button>
+                <button class="colour_button" id="dodgerblue"></button>
+                <button class="colour_button" id="midnightblue"></button>
+            </div>
+        </div>
+        <div id="chat">
+            <p>Messages</p>
+            <div id="messages">
+
+            </div>
+            <form id="send_message">
+                <input id="input_message" type="text" name="message" placeholder="send a message..."></input>
+                <input id="submit_message" type="submit" value="send"></input>
+            </form>
+        </div>
+
+        <script src="whiteboard_client.js"></script>
+    </body>
+</html>

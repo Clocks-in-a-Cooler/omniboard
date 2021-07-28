@@ -1,0 +1,108 @@
+#controls {
+    position: absolute;
+    top: 5px; left: 5px;
+    width: 260px; height: 350px;
+    padding: 5px;
+    border: 1px solid black;
+    background-color: white;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+#tools {
+    left: 0;
+    width: 100%;
+}
+
+.tool_button {
+    width: 48px; height: 48px;
+    border: 3px solid white;
+}
+
+#size {
+    width: 100%;
+}
+
+/* lots of online searching and sleepless nights to do this, hope you guys like it...? */
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 256px;
+    height: 15px;
+    background-color: rgb(218, 218, 218);
+    outline: none;
+    border-radius: 7px;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 0;
+    width: 15px;
+    height: 15px;
+    background: rgb(103, 166, 238);
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    border: 0;
+    width: 15px;
+    height: 15px;
+    background: rgb(103, 166, 238);
+
+    cursor: pointer;
+}
+
+#colours {
+    top: 0; left: 0;
+    width: 100%;
+    height: 100px;
+}
+
+.colour_button {
+    width: 30px;
+    height: 30px;
+    border: 3px solid white;
+    display: inline;
+}
+
+.colour_button#red {
+    background-color: red;
+}
+
+.colour_button.selected#red {
+    border-color: red;
+}
+
+.colour_button#orange {
+    background-color: orange;
+}
+
+.colour_button#yellow {
+    background-color: yellow;
+}
+
+.colour_button#lime {
+    background-color: lime;
+}
+
+.colour_button#forestgreen {
+    background-color: forestgreen;
+}
+
+.colour_button#dodgerblue {
+    background-color: dodgerblue;
+}
+
+.colour_button#midnightblue {
+    background-color: midnightblue;
+}
+
+.colour_button#mediumslateblue {
+    background-color: mediumslateblue;
+}
+
+.colour_button#black {
+    background-color: black;
+}
