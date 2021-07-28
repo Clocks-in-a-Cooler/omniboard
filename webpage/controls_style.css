@@ -18,6 +18,35 @@
 .tool_button {
     width: 48px; height: 48px;
     border: 3px solid white;
+    background-size: contain;
+}
+
+.tool_button.selected {
+    border-color: black;
+}
+
+.tool_button#pencil {
+    background-image: url("pencil.svg");
+}
+
+.tool_button#eraser {
+    background-image: url("eraser.svg");
+}
+
+.tool_button#line {
+    background-image: url("line.svg");
+}
+
+.tool_button#rectangle {
+    background-image: url("rectangle.svg");
+}
+
+.tool_button#circle {
+    background-image: url("circle.svg");
+}
+
+.tool_button#fill {
+    background-image: url("bucket.svg");
 }
 
 #size {
@@ -35,22 +64,13 @@
     border-radius: 7px;
 }
 
-.slider::-webkit-slider-thumb {
+.slider::-webkit-slider-thumb, .slider::-moz-range-thumb {
     -webkit-appearance: none;
     appearance: none;
     border: 0;
     width: 15px;
     height: 15px;
     background: rgb(103, 166, 238);
-    cursor: pointer;
-}
-
-.slider::-moz-range-thumb {
-    border: 0;
-    width: 15px;
-    height: 15px;
-    background: rgb(103, 166, 238);
-
     cursor: pointer;
 }
 
@@ -79,30 +99,62 @@
     background-color: orange;
 }
 
+.colour_button.selected#orange {
+    border-color: orange;
+}
+
 .colour_button#yellow {
     background-color: yellow;
+}
+
+.colour_button.selected#yellow {
+    border-color: yellow;
 }
 
 .colour_button#lime {
     background-color: lime;
 }
 
+.colour_button.selected#lime {
+    border-color: lime;
+}
+
 .colour_button#forestgreen {
     background-color: forestgreen;
+}
+
+.colour_button.selected#forestgreen {
+    border-color: forestgreen;
 }
 
 .colour_button#dodgerblue {
     background-color: dodgerblue;
 }
 
+.colour_button.selected#dodgerblue {
+    border-color: dodgerblue;
+}
+
 .colour_button#midnightblue {
     background-color: midnightblue;
+}
+
+.colour_button.selected#midnightblue {
+    border-color: midnightblue;
 }
 
 .colour_button#mediumslateblue {
     background-color: mediumslateblue;
 }
 
+.colour_button.selected#mediumslateblue {
+    border-color: mediumslateblue;
+}
+
 .colour_button#black {
     background-color: black;
+}
+
+.colour_button.selected#black {
+    border-color: black;
 }
