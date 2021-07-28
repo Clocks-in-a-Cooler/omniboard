@@ -23,7 +23,7 @@
             <hr />
             <p id="size_label">Size: 5</p>
             <div id="size">
-                <input type="range" min="2" max="20" value="5" class="slider" step="0.1" id="size_slider" />
+                <input type="range" autocomplete="off" min="2" max="20" value="5" class="slider" step="0.1" id="size_slider" />
             </div>
             <hr />
             <p>Colour</p>
@@ -48,6 +48,17 @@
                 <input id="submit_message" type="submit" value="send"></input>
             </form>
         </div>
+        <div id="overlay">
+            <div id="login_box" class="centered">
+                <h3>Omniboard</h3>
+                <p>Welcome! Type in a nickname to start drawing...</p>
+                <form id="login_form">
+                    <input type="text" name="username" placeholder="your nickname..."></input>
+                    <input type="submit" value="enter"></input>
+                </form>
+            </div>
+        </div>
+        <!-- <script src="socket.io.min.js"></script> -->
         <script src="tools.js"></script>
         <script src="whiteboard_client.js"></script>
     </body>

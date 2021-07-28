@@ -2,6 +2,10 @@
 const chat_div     = document.getElementById("chat");
 const controls_div = document.getElementById("controls");
 
+// const socket  = io();
+var name      = "";
+var logged_in = false;
+
 // some controls things
 
 /**
@@ -120,6 +124,7 @@ size_slider.addEventListener("input", event => {
 });
 
 addEventListener("mousemove", event => {
+    if (!logged_in) return;
     if (mouse_down.chat) {
         chat_div.style.top  = "" + (chat_div.offsetTop + event.movementY) + "px";
         chat_div.style.left = "" + (chat_div.offsetLeft + event.movementX) + "px";
