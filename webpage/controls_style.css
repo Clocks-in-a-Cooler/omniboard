@@ -25,6 +25,15 @@
     border-color: black;
 }
 
+.tool_button:disabled {
+    background-color: gray;
+    opacity: 0.5;
+}
+
+.tool_button:disabled:hover {
+    border-color: white;
+}
+
 .tool_button#pencil {
     background-image: url("pencil.svg");
 }

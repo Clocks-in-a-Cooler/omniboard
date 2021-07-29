@@ -23,6 +23,24 @@
     user-select: text;
     -moz-user-select: text;
     -webkit-user-select: text;
+
+    padding: 5px;
+    position: relative;
+    margin-top: 5px;
+
+    left: 5px;
+    display: block;
+    width: 70%;
+}
+
+#messages .message.my_message {
+    width: 70%;
+    left: 25%;
+}
+
+#messages .message.notification {
+    color: white;
+    background-color: black;
 }
 
 #send_message {

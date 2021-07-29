@@ -14,7 +14,7 @@ var tools = {
                 if (this.last_pos != null) {
                     var drawing_data = {
                         colour: current_colour,
-                        tool: current_tool,
+                        tool: "pencil",
                         start: this.last_pos,
                         end: {
                             x: event.pageX,
@@ -22,6 +22,8 @@ var tools = {
                         },
                         size: current_size,
                     }
+
+                    socket.emit("drawing", drawing_data);
 
                     this.draw(drawing_data, image_context);
                 }
@@ -92,10 +94,13 @@ var tools = {
                 };
                 if (this.last_pos != null) {
                     var draw_data = {
+                        tool: "eraser",
                         size: current_size * 4,
                         start: this.last_pos,
                         end: mouse_pos,
                     };
+
+                    socket.emit("drawing", draw_data);
 
                     this.draw(draw_data, image_context);
                 }
@@ -223,3 +228,12 @@ var tools = {
         },
     }
 };
+
+try {
+    if (window) {
+        console.log("tools.js is running in browser");
+    }
+} catch (e) {
+    //if you're here, then we're in Node.js
+    module.exports = tools;
+}
