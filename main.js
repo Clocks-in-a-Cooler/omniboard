@@ -28,12 +28,31 @@ function remove_user(user) {
     });
 }
 
+/**
+ * @param { User } user
+ * @returns { Object[] }
+ */
+function get_users(user) {
+    return users.filter(u => {
+        return u != user;
+    }).map(u => {
+        return {
+            x: u.x,
+            y: u.y,
+            tool: u.tool
+        };
+    });
+};
+
 /** 
  * @param { socket.Socket } socket 
  */
 function handle_connection(socket) {
     log("a new connection is coming...");
     var address = socket.handshake.address;
+    /**
+     * @type { User }
+     */
     var user    = null;
 
     /**
@@ -70,12 +89,22 @@ function handle_connection(socket) {
 
     socket.on("position update", data => {
         user_exists(data.name);
+        user.x    = data.x;
+        user.y    = data.y;
+        user.tool = data.tool;
+
+        socket.emit("server update", get_users(user));
     });
 
     socket.on("send message", data => {
         var message = user.name + ": " + data;
         log(message, "chat");
         socket.broadcast.emit("incoming message", message);
+    });
+
+    socket.on("disconnect", data => {
+        socket.broadcast.emit("notification", `${ user.name } has left.`);
+        remove_user(user);
     });
 }
 

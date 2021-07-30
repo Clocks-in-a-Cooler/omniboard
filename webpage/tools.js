@@ -13,6 +13,7 @@ var tools = {
             if (event.buttons & MOUSE_LEFT_BUTTON) {
                 if (this.last_pos != null) {
                     var drawing_data = {
+                        name: username,
                         colour: current_colour,
                         tool: "pencil",
                         start: this.last_pos,
@@ -94,6 +95,7 @@ var tools = {
                 };
                 if (this.last_pos != null) {
                     var draw_data = {
+                        name: username,
                         tool: "eraser",
                         size: current_size * 4,
                         start: this.last_pos,

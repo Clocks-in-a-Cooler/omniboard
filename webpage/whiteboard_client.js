@@ -37,8 +37,39 @@ socket.on("logged in", data => {
     requestAnimationFrame(animate);
 });
 
-socket.on("server update", data => {
+// drawing others
+function create_sprite(path) {
+    /**
+     * @type { HTMLImageElement }
+     */
+    var img = document.createElement("img");
+    img.src = path;
+    return img;
+}
 
+var sprites = {
+    "pencil": create_sprite("pencil.svg"),
+    "eraser": create_sprite("eraser.svg"),
+}
+
+var others = [];
+
+function draw_others() {
+    others.forEach(other => {
+        switch (other.tool) {
+            case "pencil":
+                control_context.drawImage(sprites.pencil, other.x - 7, other.y - 41);
+                break;
+            case "eraser":
+                control_context.drawImage(sprites.eraser, other.x, other.y - 48);
+                break;
+            default:
+        }
+    });
+}
+
+socket.on("server update", data => {
+    others = data;
 });
 
 socket.on("draw", data => {
@@ -100,7 +131,7 @@ var current_size   = 5;
 
 /**
  * @param { String } classname
- * @param { Function } func
+ * @param { Function } callback
  */
 function create_radio_button_group(classname, callback) {
     var buttons = Array.from(document.getElementsByClassName(classname));
@@ -231,5 +262,14 @@ addEventListener("resize", () => {
 function animate() {
     control_context.clearRect(0, 0, window.innerWidth, window.innerHeight);
     tools[current_tool].draw_control();
+    draw_others();
+
+    socket.emit("position update", {
+        name: username,
+        x: mouse_position.x,
+        y: mouse_position.y,
+        tool: current_tool,
+    });
+
     requestAnimationFrame(animate);
 }
