@@ -1,6 +1,72 @@
 const MOUSE_LEFT_BUTTON  = 1;
 const MOUSE_RIGHT_BUTTON = 2;
 
+/**
+ * @typedef { Object } Pixel
+ * @property { number } r
+ * @property { number } g
+ * @property { number } b
+ * @property { number } a
+ */
+
+const colours = { 
+    "crimson":      { r: 220, g: 20,  b: 60,  a: 255 },
+    "orange":       { r: 255, g: 165, b: 0,   a: 255 },
+    "yellow":       { r: 255, g: 255, b: 0,   a: 255 },
+    "springgreen":  { r: 0,   g: 255, b: 127, a: 255 },
+    "forestgreen":  { r: 34,  g: 139, b: 34,  a: 255 },
+    "dodgerblue":   { r: 30,  g: 144, b: 255, a: 255 },
+    "midnightblue": { r: 25,  g: 25,  b: 112, a: 255 },
+    "black":        { r: 0,   g: 0,   b: 0,   a: 255 },
+};
+
+// some client-side helper functions
+
+/**
+ * gets the end position of the line/rectangle/circle, depending on whether the shift key is pressed.
+ * this is a client side helper function and will not run on the server.
+ * @param { { x: number, y: number } } starting_position
+ * @returns { { x: number, y: number } }
+ */
+function get_end_position(start_position) {
+    if (!keys.shift) {
+        return mouse_position;
+    }
+
+    var side_length = Math.min(
+        Math.abs(start_position.x - mouse_position.x),
+        Math.abs(start_position.y - mouse_position.y)
+    );
+
+    var end_position = {
+        x: start_position.x + (side_length * Math.sign(mouse_position.x - start_position.x)),
+        y: start_position.y + (side_length * Math.sign(mouse_position.y - start_position.y))
+    };
+
+    return end_position;
+}
+
+/**
+ * draws a crosshair in the current mouse position, in the current colour, on the canvas context provided.
+ * this is a client side helper function and will not run on the server.
+ * @param { CanvasRenderingContext2D } context 
+ * @param { number } size
+ */
+function draw_crosshair(context, size = 10) {
+    context.save();
+    context.strokeStyle = current_colour;
+    context.lineWidth   = 2;
+    context.translate(mouse_position.x, mouse_position.y);
+    context.beginPath();
+    context.moveTo(0, 10);
+    context.lineTo(0, -10);
+    context.moveTo(10, 0);
+    context.lineTo(-10, 0);
+    context.closePath();
+    context.stroke();
+    context.restore();
+}
+
 var tools = {
     "pencil": {
         last_pos: null,
@@ -227,6 +293,148 @@ var tools = {
                     y: center.y + side_length,
                 },
             ];
+        },
+    },
+
+    "fill": {
+        mouse_seen: false,
+        /**
+         * @param { MouseEvent } event 
+         */
+        update: function(event) {
+            if (event.buttons & MOUSE_LEFT_BUTTON) {
+                if (!this.mouse_seen) {
+                    var data = {
+                        name: username,
+                        tool: "fill",
+                        x: mouse_position.x,
+                        y: mouse_position.y,
+                        colour: current_colour,
+                    };
+                    socket.emit("drawing", data);
+                    this.draw(data, image_context);
+                    this.mouse_seen = true;
+                }
+            } else {
+                this.mouse_seen = false;
+            }
+        },
+
+        /**
+         * 
+         * @param { Object } data
+         * @param { number } data.x
+         * @param { number } data.y
+         * @param { string } data.colour
+         * @param { CanvasRenderingContext2D } cxt 
+         */
+        draw: function(data, cxt) {
+            /**
+             * @type { Pixel }
+             */
+            var starting_colour = colours[data.colour];
+            if (!colour) { 
+                console.log(`unknown colour: ${ data.colour }`);
+                return;
+            }
+
+            var coordinate_stack = [];
+
+            // finish
+        },
+
+        draw_control: function() {
+            draw_crosshair(control_context);
+        },
+
+        /**
+         * @param { ImageData } image_data 
+         * @param { number } x 
+         * @param { number } y
+         * @returns { Pixel }
+         */
+        get_pixel_data: function(image_data, x, y) {
+            var starting_index = (x + y * image_data.width) * 4;
+            return {
+                r: image_data[starting_index],
+                g: image_data[starting_index + 1],
+                b: image_data[starting_index + 2],
+                a: image_data[starting_index + 3]
+            };
+        },
+    },
+
+    "line": {
+        /**
+         * @type { { x: number, y: number } }
+         */
+        starting_pos: null,
+        /**
+         * @type { { x: number, y: number } }
+         */
+        ending_pos: null,
+
+        /**
+         * @param { MouseEvent } event 
+         */
+        update: function(event) {
+            if (event.buttons & MOUSE_LEFT_BUTTON) {
+                if (this.starting_pos == null) {
+                    this.starting_pos = mouse_position;
+                }
+                this.ending_pos = get_end_position(this.starting_pos);
+            } else {
+                if (this.starting_pos != null) {
+                    var data = {
+                        colour: current_colour,
+                        size: current_size,
+                        start: this.starting_pos,
+                        end: this.ending_pos,
+                        tool: "line",
+                    };
+
+                    socket.emit("drawing", data);
+                    this.draw(data, image_context);
+
+                    this.starting_pos = null;
+                    this.ending_pos   = null;
+                }
+            }
+        },
+        
+        draw_control: function() {
+            draw_crosshair(control_context);
+            if (this.starting_pos != null) {
+                var data = {
+                    colour: current_colour,
+                    size: current_size,
+                    start: this.starting_pos,
+                    end: this.ending_pos,
+                    tool: "line",
+                };
+
+                this.draw(data, control_context);
+            }
+        },
+
+        /**
+         * 
+         * @param { Object } data
+         * @param { { x: number, y: number } } data.start
+         * @param { { x: number, y: number } } data.end
+         * @param { string } data.colour
+         * @param { number } data.size
+         * @param { CanvasRenderingContext2D } cxt 
+         */
+        draw: function(data, cxt) {
+            cxt.strokeStyle = data.colour;
+            cxt.lineWidth   = data.size;
+
+            cxt.beginPath();
+            cxt.moveTo(data.start.x, data.start.y);
+            cxt.lineTo(data.end.x, data.end.y);
+            cxt.closePath();
+            cxt.stroke();
         },
     }
 };

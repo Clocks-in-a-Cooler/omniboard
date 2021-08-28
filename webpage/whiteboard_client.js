@@ -64,6 +64,7 @@ function draw_others() {
                 control_context.drawImage(sprites.eraser, other.x, other.y - 48);
                 break;
             default:
+                control_context.drawImage(sprites.pencil, other.x - 7, other.y - 41);
         }
     });
 }
@@ -255,6 +256,26 @@ addEventListener("mousemove", event => {
 addEventListener("resize", () => {
     image_canvas.width  = control_canvas.width  = window.innerWidth;
     image_canvas.height = control_canvas.height = window.innerHeight;
+});
+
+addEventListener("keydown", event => {
+    // we're doing this Yanderedev style, because there are only two of them
+    // not differentiating between left and right CTRL/SHIFT on purpose here
+    if (event.key == "Shift") {
+        keys.shift = true;
+    }
+    if (event.key == "Control") {
+        keys.control = true;
+    }
+});
+
+addEventListener("keyup", event => {
+    if (event.key == "Shift") {
+        keys.shift = false;
+    }
+    if (event.key == "Control") {
+        keys.control = false;
+    }
 });
 
 // update cycle

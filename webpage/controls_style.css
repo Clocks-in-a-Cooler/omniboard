@@ -96,12 +96,12 @@
     display: inline;
 }
 
-.colour_button#red {
-    background-color: red;
+.colour_button#crimson {
+    background-color: crimson;
 }
 
-.colour_button.selected#red {
-    border-color: red;
+.colour_button.selected#crimson {
+    border-color: crimson;
 }
 
 .colour_button#orange {
@@ -120,12 +120,12 @@
     border-color: yellow;
 }
 
-.colour_button#lime {
-    background-color: lime;
+.colour_button#springgreen {
+    background-color: springgreen;
 }
 
-.colour_button.selected#lime {
-    border-color: lime;
+.colour_button.selected#springgreen {
+    border-color: springgreen;
 }
 
 .colour_button#forestgreen {

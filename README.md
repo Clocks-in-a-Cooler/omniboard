@@ -38,10 +38,6 @@ Omniboard won't be possible without these libraries and their awesome contributo
 
 * sound for the client notifications &mdash; [zzfx](https://zzfx.3d2k.com/)
 
-* database for chat messages &mdash; [lowdb](https://github.com/typicode/lowdb)
-
-* hashing algorithms &mdash; [jshashes](https://github.com/h2non/jshashes)
-
 ## License
 
 MIT License. Use this however you want.
