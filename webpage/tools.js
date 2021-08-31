@@ -436,7 +436,155 @@ var tools = {
             cxt.closePath();
             cxt.stroke();
         },
-    }
+    },
+
+    "rectangle": {
+        /**
+         * @type { { x: number, y: number }}
+         */
+        starting_pos: null,
+        /**
+         * @type { { x: number, y: number }}
+         */
+        ending_pos: null, 
+
+        /**
+         * @param { MouseEvent } event 
+         */
+        update: function(event) {
+            if (event.buttons & MOUSE_LEFT_BUTTON) {
+                if (this.starting_pos == null) {
+                    this.starting_pos = mouse_position;
+                }
+                this.ending_pos = get_end_position(this.starting_pos);
+            } else {
+                if (this.starting_pos != null) {
+                    var data = {
+                        colour: current_colour,
+                        size: current_size,
+                        start: this.starting_pos,
+                        end: this.ending_pos,
+                        tool: "rectangle",
+                    };
+
+                    socket.emit("drawing", data);
+                    this.draw(data, image_context);
+                    
+                    this.starting_pos = null;
+                    this.ending_pos   = null;
+                }
+            }
+        },
+
+        draw_control: function() {
+            draw_crosshair(control_context);
+            if (this.starting_pos != null) {
+                var data = {
+                    colour: current_colour,
+                    size: current_size,
+                    start: this.starting_pos,
+                    end: this.ending_pos,
+                    tool: "rectangle",
+                };
+
+                this.draw(data, control_context);
+            }
+        },
+
+        /**
+         * 
+         * @param { Object } data
+         * @param { { x: number, y: number } } data.start
+         * @param { { x: number, y: number } } data.end
+         * @param { string } data.colour
+         * @param { number } data.size
+         * @param { CanvasRenderingContext2D } cxt 
+         */
+        draw: function(data, cxt) {
+            cxt.strokeStyle = data.colour;
+            cxt.lineWidth   = data.size;
+            var width       = data.end.x - data.start.x;
+            var height      = data.end.y - data.start.y;
+            cxt.strokeRect(data.start.x, data.start.y, width, height);
+        },
+    },
+
+    "circle": {
+        /**
+         * @type { { x: number, y: number }}
+         */
+        starting_pos: null,
+        /**
+         * @type { { x: number, y: number }}
+         */
+        ending_pos: null,
+
+        /**
+         * @param { MouseEvent } event 
+         */
+         update: function(event) {
+            if (event.buttons & MOUSE_LEFT_BUTTON) {
+                if (this.starting_pos == null) {
+                    this.starting_pos = mouse_position;
+                }
+                this.ending_pos = get_end_position(this.starting_pos);
+            } else {
+                if (this.starting_pos != null) {
+                    var data = {
+                        colour: current_colour,
+                        size: current_size,
+                        start: this.starting_pos,
+                        end: this.ending_pos,
+                        tool: "circle",
+                    };
+
+                    socket.emit("drawing", data);
+                    this.draw(data, image_context);
+                    
+                    this.starting_pos = null;
+                    this.ending_pos   = null;
+                }
+            }
+        },
+
+        draw_control: function() {
+            draw_crosshair(control_context);
+            if (this.starting_pos != null) {
+                var data = {
+                    colour: current_colour,
+                    size: current_size,
+                    start: this.starting_pos,
+                    end: this.ending_pos,
+                    tool: "circle",
+                };
+
+                this.draw(data, control_context);
+            }
+        },
+
+        /**
+         * 
+         * @param { Object } data
+         * @param { { x: number, y: number } } data.start
+         * @param { { x: number, y: number } } data.end
+         * @param { string } data.colour
+         * @param { number } data.size
+         * @param { CanvasRenderingContext2D } cxt 
+         */
+        draw: function(data, cxt) {
+            cxt.strokeStyle = data.colour;
+            cxt.lineWidth   = data.size;
+            var radius_x    = Math.abs(data.end.x - data.start.x) / 2;
+            var radius_y    = Math.abs(data.end.y - data.start.y) / 2;
+            var center_x    = (data.start.x + data.end.x) / 2;
+            var center_y    = (data.start.y + data.end.y) / 2;
+
+            cxt.beginPath();
+            cxt.ellipse(center_x, center_y, radius_x, radius_y, 0, 0, Math.PI * 2);
+            cxt.closePath();
+            cxt.stroke();
+        },
+    },
 };
 
 try {

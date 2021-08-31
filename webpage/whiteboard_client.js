@@ -128,6 +128,7 @@ const size_label = document.getElementById("size_label");
 
 var current_colour = "red";
 var current_tool   = "pencil";
+var last_tool      = "pencil";
 var current_size   = 5;
 
 /**
@@ -151,11 +152,17 @@ function create_radio_button_group(classname, callback) {
 }
 
 create_radio_button_group("tool_button", new_tool => {
+    last_tool    = current_tool == "eraser" ? last_tool : current_tool;
     current_tool = new_tool;
 });
 
 create_radio_button_group("colour_button", new_colour => {
     current_colour = new_colour;
+
+    // TheAyeStride's anti-frustration feature
+    if (current_tool == "eraser") {
+        current_tool = last_tool;
+    }
 });
 
 /**
